@@ -1,0 +1,31 @@
+using UnityEngine;
+
+public class PlayerMovement : MonoBehaviour
+{
+    public float moveSpeed = 5.0f;  // The speed at which the player moves
+    public float lookSpeed = 3.0f;  // The speed at which the player looks around
+    private float mouseX, mouseY;   // The current mouse position
+
+    void Update()
+    {
+        // Get the horizontal and vertical input axes
+        float horizontal = Input.GetAxis("Horizontal");
+        float vertical = Input.GetAxis("Vertical");
+
+        // Move the player in the direction of the input axes
+        transform.Translate(new Vector3(horizontal, 0, vertical) * moveSpeed * Time.deltaTime);
+
+        // Get the mouse input axes
+        mouseX += Input.GetAxis("Mouse X") * lookSpeed;
+        mouseY -= Input.GetAxis("Mouse Y") * lookSpeed;
+
+        // Clamp the mouseY to prevent the player from looking too far up or down
+        mouseY = Mathf.Clamp(mouseY, -90.0f, 90.0f);
+
+        // Rotate the player's body based on the horizontal mouse input
+        transform.eulerAngles = new Vector3(0, mouseX, 0);
+
+        // Rotate the camera based on the vertical mouse input
+        Camera.main.transform.eulerAngles = new Vector3(mouseY, mouseX, 0);
+    }
+}
